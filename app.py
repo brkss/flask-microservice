@@ -2,6 +2,7 @@ from flask import Flask
 import os
 import json
 from init import create_app
+from models/Book import 
 
 app = create_app()
 
