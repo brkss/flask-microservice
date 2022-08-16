@@ -10,6 +10,7 @@ load_dotenv()
 
 
 def create_app():
+    print("name : ", __name__)
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = DB_CONNECTION_URI
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

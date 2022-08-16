@@ -1,10 +1,13 @@
-from flask import Flask
+from flask import request 
 import os
 import json
 from .init import create_app 
 from .models import Book 
+import uuid
+from .validate import validate_adding_book_data
 
 app = create_app()
+print("name from app : ", __name__)
 
 @app.route('/', methods=['GET'])
 def fetch():
@@ -24,6 +27,17 @@ def books():
         all_books.append(new_book)
     return json.dumps(all_books), 200
 
+@app.route('/add', methods=['POST'])
+def add_book():
+    data = request.get_json()
+    print(data)
+    if not validate_adding_book_data(data):
+        return json.dumps({"success": False, "message": "Invalid Data !"}), 200
+    name = data["name"];
+    author = data["author"]
+    price = data["price"]
+    id = uuid.uuid4()
+    return json.dumps({"success": True}), 200
 
 if __name__ == '__main__':
     port = 5000
