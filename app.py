@@ -7,7 +7,6 @@ import uuid
 from .validate import validate_adding_book_data
 
 app = create_app()
-print("name from app : ", __name__)
 
 @app.route('/', methods=['GET'])
 def fetch():
@@ -41,6 +40,17 @@ def add_book():
     db.session.add(book)
     db.session.commit()
     return json.dumps({"success": True}), 200
+
+@app.route('/book/<book_id>', methods=['GET'])
+def book(book_id):
+    book = Book.query.get(book_id)
+    res = {
+        "name": book.name,
+        "id": book.id,
+        "author": book.author,
+        "price": book.price
+    }
+    return json.dumps(res), 200
 
 if __name__ == '__main__':
     port = 5000
