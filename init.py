@@ -1,11 +1,12 @@
 from flask import Flask
 import flask_sqlalchemy
-from config import DB_CONNECTION_URI
+from .config import DB_CONNECTION_URI
 from dotenv import load_dotenv
+from .models import db
 
 load_dotenv()
 
-db = flask_sqlalchemy.SQLAlchemy()
+#db = flask_sqlalchemy.SQLAlchemy()
 
 
 def create_app():
@@ -14,5 +15,5 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.app_context().push()
     db.init_app(app)
-    db.create_all
+    db.create_all()
     return app

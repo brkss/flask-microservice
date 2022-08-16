@@ -1,10 +1,8 @@
 from flask import Flask
 import os
 import json
-from init import create_app
-from models import Book 
-
-print("db = ", db)
+from .init import create_app 
+from .models import Book 
 
 app = create_app()
 
@@ -24,7 +22,7 @@ def books():
             "price": book.price
         }
         all_books.append(new_book)
-    return json.dumps(all_book), 200
+    return json.dumps(all_books), 200
 
 
 if __name__ == '__main__':

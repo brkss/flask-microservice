@@ -1,7 +1,8 @@
-from init import db
+#from init import db
+import flask_sqlalchemy
 
+db = flask_sqlalchemy.SQLAlchemy()
 
-print(db)
 class Book(db.Model):
     __tablename__ = 'books'
     id = db.Column(db.Integer, primary_key=True)
