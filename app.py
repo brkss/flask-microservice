@@ -2,7 +2,7 @@ from flask import request
 import os
 import json
 from .init import create_app 
-from .models import Book 
+from .models import Book, db 
 import uuid
 from .validate import validate_adding_book_data
 
@@ -37,6 +37,9 @@ def add_book():
     author = data["author"]
     price = data["price"]
     id = uuid.uuid4()
+    book = Book(name=name, author=author, price=price, id=id)
+    db.session.add(book)
+    db.session.commit()
     return json.dumps({"success": True}), 200
 
 if __name__ == '__main__':
