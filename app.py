@@ -4,7 +4,7 @@ import json
 from .init import create_app 
 from .models import Book, db 
 import uuid
-from .validate import validate_adding_book_data
+from .validate import validate_book_data
 
 app = create_app()
 
@@ -30,7 +30,7 @@ def books():
 def add_book():
     data = request.get_json()
     print(data)
-    if not validate_adding_book_data(data):
+    if not validate_book_data(data):
         return json.dumps({"success": False, "message": "Invalid Data !"}), 200
     name = data["name"];
     author = data["author"]
@@ -44,13 +44,35 @@ def add_book():
 @app.route('/book/<book_id>', methods=['GET'])
 def book(book_id):
     book = Book.query.get(book_id)
+    if not book:
+        return json.dumps({"success": False})
     res = {
         "name": book.name,
         "id": book.id,
         "author": book.author,
         "price": book.price
     }
-    return json.dumps(res), 200
+    return json.dumps({"success": True, "book": res}), 200
+
+@app.route("/book/edit/<book_id>", methods=['PUT'])
+def edit_book(book_id):
+    data = request.get_json()
+    if not validate_book_data(data):
+        return json.dumps({"success": False, "message": "Invalid Data !"}), 200
+    book = Book.query.get(book_id)
+    if not book: 
+        return json.dumps({"success": False, "message": "Invalid Book"}), 200
+    book.name = data['name']
+    book.price = data['price']
+    book.author = data['author']
+    db.session.commit()
+    return json.dumps({"success": True}), 200
+
+@app.route("/delete/<book_id>", methods=["DELETE"])
+def delete_book(book_id):
+    book = Book.query.filter_by(id=book_id).delete()
+    db.session.commit()
+    return json.dumps({"success": True}), 200
 
 if __name__ == '__main__':
     port = 5000
